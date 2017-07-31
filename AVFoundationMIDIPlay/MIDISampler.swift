@@ -11,15 +11,15 @@ import AVFoundation
 
 class MIDISampler {
     
-    var engine:AVAudioEngine!
-    var sampler:AVAudioUnitSampler!
+    var engine: AVAudioEngine!
+    var sampler: AVAudioUnitSampler!
     
     let melodicBank = UInt8(kAUSampler_DefaultMelodicBankMSB)
     let defaultBankLSB = UInt8(kAUSampler_DefaultBankLSB)
     
     /// general midi number for marimba
-    let gmMarimba = UInt8(12)
-    let gmHarpsichord = UInt8(6)
+    let gmMarimba = UInt8(15)
+    let gmHarpsichord = UInt8(3)
     
     init() {
         initAudioEngine()
@@ -30,7 +30,7 @@ class MIDISampler {
         engine = AVAudioEngine()
 
         sampler = AVAudioUnitSampler()
-        engine.attachNode(sampler)
+        engine.attach(sampler)
         
         engine.connect(sampler, to: engine.mainMixerNode, format: nil)
         
@@ -39,7 +39,7 @@ class MIDISampler {
     
     func startEngine() {
         
-        if engine.running {
+        if engine.isRunning {
             print("audio engine already started")
             return
         }
@@ -54,17 +54,17 @@ class MIDISampler {
     }
     
    
-    func loadPatch(gmpatch:UInt8, channel:UInt8 = 0) {
+    func loadPatch(_ gmpatch:UInt8, channel:UInt8 = 0) {
         
         guard let soundbank =
-            NSBundle.mainBundle().URLForResource("GeneralUser GS MuseScore v1.442", withExtension: "sf2")
+            Bundle.main.url(forResource: "GeneralUser GS MuseScore v1.442", withExtension: "sf2")
             else {
                 print("could not read sound font")
                 return
         }
         
         do {
-            try sampler.loadSoundBankInstrumentAtURL(soundbank, program:gmpatch,
+            try sampler.loadSoundBankInstrument(at: soundbank, program:gmpatch,
                 bankMSB: melodicBank, bankLSB: defaultBankLSB)
             
         } catch let error as NSError {

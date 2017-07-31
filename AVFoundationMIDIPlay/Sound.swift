@@ -13,47 +13,48 @@ class Sound {
     
     var midiPlayer:AVMIDIPlayer!
     
-    var timer:NSTimer?
+    var timer:Timer?
     
     init() {
+//        createAVMIDIPlayerFromMIDIFIleDLS()
         createAVMIDIPlayerFromMIDIFIle()
     }
     
     func createAVMIDIPlayerFromMIDIFIle() {
         
-        guard let midiFileURL = NSBundle.mainBundle().URLForResource("sibeliusGMajor", withExtension: "mid") else {
-            fatalError("\"sibeliusGMajor.mid\" file not found.")
+        guard let midiFileURL = Bundle.main.url(forResource: "test", withExtension: "mid") else {
+            fatalError("\"test.mid\" file not found.")
         }
         
-        guard let bankURL = NSBundle.mainBundle().URLForResource("GeneralUser GS MuseScore v1.442", withExtension: "sf2") else {
+        guard let bankURL = Bundle.main.url(forResource: "GeneralUser GS MuseScore v1.442", withExtension: "sf2") else {
             fatalError("\"GeneralUser GS MuseScore v1.442.sf2\" file not found.")
         }
         
         do {
-            try self.midiPlayer = AVMIDIPlayer(contentsOfURL: midiFileURL, soundBankURL: bankURL)
+            try self.midiPlayer = AVMIDIPlayer(contentsOf: midiFileURL, soundBankURL: bankURL)
             print("created midi player with sound bank url \(bankURL)")
         } catch let error as NSError {
             print("Error \(error.localizedDescription)")
         }
         
         self.midiPlayer.prepareToPlay()
-        self.midiPlayer.rate = 1.0 // default
+        self.midiPlayer.rate = 1 // default
         
         print("Duration: \(midiPlayer.duration)")
     }
     
     func createAVMIDIPlayerFromMIDIFIleDLS() {
         
-        guard let midiFileURL = NSBundle.mainBundle().URLForResource("sibeliusGMajor", withExtension: "mid") else {
-            fatalError("\"sibeliusGMajor.mid\" file not found.")
+        guard let midiFileURL = Bundle.main.url(forResource: "test", withExtension: "mid") else {
+            fatalError("\"test.mid\" file not found.")
         }
         
-        guard let bankURL = NSBundle.mainBundle().URLForResource("gs_instruments", withExtension: "dls") else {
+        guard let bankURL = Bundle.main.url(forResource: "gs_instruments", withExtension: "dls") else {
             fatalError("\"gs_instruments.dls\" file not found.")
         }
         
         do {
-            try self.midiPlayer = AVMIDIPlayer(contentsOfURL: midiFileURL, soundBankURL: bankURL)
+            try self.midiPlayer = AVMIDIPlayer(contentsOf: midiFileURL, soundBankURL: bankURL)
             print("created midi player with sound bank url \(bankURL)")
         } catch let error as NSError {
             print("Error \(error.localizedDescription)")
@@ -73,14 +74,14 @@ class Sound {
     }
     
     func stopPlaying() {
-        if midiPlayer.playing {
+        if midiPlayer.isPlaying {
             midiPlayer.stop()
             self.timer?.invalidate()
         }
     }
     
     func togglePlaying() {
-        if midiPlayer.playing {
+        if midiPlayer.isPlaying {
             stopPlaying()
         } else {
             play()
@@ -88,11 +89,11 @@ class Sound {
     }
     
     @objc func updateTime() {
-        print("\(midiPlayer.currentPosition)")
+        //print("\(midiPlayer.currentPosition)")
     }
     
     func startTimer() {
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
+        timer = Timer.scheduledTimer(timeInterval: 0.1,
             target:self,
             selector: #selector(Sound.updateTime),
             userInfo:nil,

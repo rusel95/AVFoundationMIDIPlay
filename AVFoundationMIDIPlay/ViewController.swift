@@ -26,22 +26,22 @@ class ViewController: UIViewController {
     }
 
 
-    @IBAction func playAction(sender: UIButton) {
+    @IBAction func playAction(_ sender: UIButton) {
         sound.togglePlaying()
     }
     
-    @IBAction func samplerDown(sender: UIButton) {
+    @IBAction func samplerDown(_ sender: UIButton) {
         sampler.hstart()
     }
     
-    @IBAction func samplerUp(sender: UIButton) {
+    @IBAction func samplerUp(_ sender: UIButton) {
         sampler.hstop()
     }
 
-    @IBAction func marimbaDown(sender: UIButton) {
+    @IBAction func marimbaDown(_ sender: UIButton) {
         sampler.mstart()
     }
-    @IBAction func marimbaUp(sender: UIButton) {
+    @IBAction func marimbaUp(_ sender: UIButton) {
         sampler.mstop()
     }
 }
